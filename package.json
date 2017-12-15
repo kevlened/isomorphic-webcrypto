@@ -2,8 +2,8 @@
   "name": "isomorphic-webcrypto",
   "version": "0.0.1",
   "description": "",
-  "browser": "cls/browser.js",
-  "main": "cls/node.js",
+  "browser": "cjs/browser.js",
+  "main": "cjs/node.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
