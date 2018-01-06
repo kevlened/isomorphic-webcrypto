@@ -4,6 +4,7 @@
   "description": "isomorphic webcrypto for IE11+ in 3kB",
   "browser": "browser.js",
   "main": "node.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"no tests\"",
     "release": "npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
