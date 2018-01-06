@@ -1,18 +1,22 @@
 {
   "name": "isomorphic-webcrypto",
   "version": "0.0.2",
-  "description": "",
-  "browser": "cjs/browser.js",
-  "main": "cjs/node.js",
+  "description": "isomorphic webcrypto for IE11+ in 3kB",
+  "browser": "browser.js",
+  "main": "node.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"no tests\"",
+    "release": "npm test && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kevlened/isomorphic-webcrypto.git"
   },
-  "keywords": [],
-  "author": "Len Boyette",
+  "keywords": [
+    "isomorphic",
+    "webcrypto",
+    "small"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kevlened/isomorphic-webcrypto/issues"
