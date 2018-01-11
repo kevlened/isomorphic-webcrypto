@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-webcrypto",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "isomorphic webcrypto for IE11+ in 3kB",
   "main": "index.js",
   "module": "index.mjs",
