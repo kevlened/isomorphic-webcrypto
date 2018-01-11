@@ -17,6 +17,8 @@ There's a simple example below, but [there are many more here](https://github.co
 
 ```javascript
 const crypto = require('isomorphic-webcrypto')
+// or
+import crypto from 'isomorphic-webcrypto'
 
 crypto.subtle.digest(
   { name: 'SHA-256' },

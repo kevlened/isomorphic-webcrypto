@@ -1,2 +1,2 @@
-require('webcrypto-shim');
-module.exports = window.crypto;
+require('webcrypto-shim')
+module.exports = window.crypto
