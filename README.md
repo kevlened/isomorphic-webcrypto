@@ -31,7 +31,25 @@ crypto.subtle.digest(
 
 ## Compatibility
 
-See [webcrypto-shim's supported browsers](https://github.com/vibornoff/webcrypto-shim#supported-browsers)
+See [webcrypto-shim's supported browsers](https://github.com/vibornoff/webcrypto-shim#supported-browsers) for standard browser support.
+
+If you need a js-only implementation for older browsers or environments that don't have any crypto support, the [Microsoft Research library](https://www.microsoft.com/en-us/download/details.aspx?id=52439) is exposed as the `extended` version.
+
+```javascript
+const crypto = require('isomorphic-crypto/extended')
+
+/**
+ * IMPORTANT: On platforms without crypto, the
+ * js-only implementation needs another source 
+ * of entropy for operations that require
+ * random numbers (creating keys, encrypting,
+ * wrapping keys) This should NOT be Math.random()
+ */
+
+crypto.initPrng(randomArrayOf48Bytes)
+```
+
+> 
 
 ## I just want to drop in a script tag
 

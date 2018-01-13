@@ -1,4 +1,5 @@
 .DS_Store
+webcrypto-shim.mjs
 
 # Logs
 logs
