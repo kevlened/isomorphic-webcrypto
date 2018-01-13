@@ -1,7 +1,7 @@
 {
   "name": "isomorphic-webcrypto",
   "version": "1.2.0",
-  "description": "isomorphic webcrypto for IE11+ in 3kB",
+  "description": "webcrypto library for Node, React Native and IE11+",
   "main": "main.js",
   "module": "index.mjs",
   "browser": {
