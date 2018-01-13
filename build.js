@@ -7,4 +7,4 @@ contents = contents.replace(
   `self === 'undefined' ? undefined : self`
 )
 contents += '\n export default {} \n'
-fs.writeFileSync(path.join(__dirname, 'webcrypto-shim.mjs'), contents)
+fs.writeFileSync(path.join(__dirname, 'src', 'webcrypto-shim.mjs'), contents)
