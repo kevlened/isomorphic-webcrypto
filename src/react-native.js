@@ -109,4 +109,26 @@ crypto.subtle.importKey = function() {
   });
 }
 
+const originalExportKey = crypto.subtle.exportKey;
+crypto.subtle.exportKey = function() {
+  const key = arguments[1];
+  return originalExportKey.apply(this, arguments)
+  .then(res => {
+    if (res.kty === 'RSA' || res.kty === 'EC') {
+      if (res.d) {
+        res.key_ops = ['sign'];
+      } else {
+        res.key_ops = ['verify'];
+      }
+    }
+    switch(res.alg) {
+      case 'EC-256':
+      case 'EC-384':
+      case 'EC-521':
+        delete res.alg;
+    }
+    return res;
+  });
+}
+
 module.exports = crypto
