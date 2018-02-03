@@ -3,7 +3,7 @@ webcrypto library for Node, React Native and IE11+
 
 ## What?
 
-There's a great Node polyfill for the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), but [it's not isomorphic yet](https://github.com/anvilresearch/webcrypto/issues/57). This fills the gap until it is.
+There's a great Node polyfill for the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), but [it's not isomorphic](https://github.com/anvilresearch/webcrypto/issues/57).
 
 IE11 and versions of Safari < 11 use an older version of the spec, so the browser implementation includes a [webcrypto-shim](https://github.com/vibornoff/webcrypto-shim) to iron out the differences. You'll still need to provide your own Promise polyfill.
 
@@ -42,24 +42,6 @@ crypto.subtle.digest(
 * Node 4+
 * React Native
 
-### Other Environments
-
-If you need to support other environments (like older browsers), use the [Microsoft Research library](https://github.com/kevlened/msrCrypto).
-
-```javascript
-const crypto = require('msrcrypto')
-
-/**
- * IMPORTANT: On platforms without crypto, the
- * js-only implementation needs another source 
- * of entropy for operations that require
- * random numbers (creating keys, encrypting,
- * wrapping keys) This should NOT be Math.random()
- */
-
-crypto.initPrng(randomArrayOf48Bytes)
-```
-
 ### React Native
 
 React Native support is implemented using [the Microsoft Research library](https://github.com/kevlened/msrCrypto). The React Native environment only supports `Math.random()`, so [react-native-securerandom](https://github.com/rh389/react-native-securerandom) is used to provide proper entropy. This is handled automatically, except for `crypto.getRandomValues()`, which requires you wait:
@@ -67,16 +49,11 @@ React Native support is implemented using [the Microsoft Research library](https
 ```javascript
 const crypto = require('isomorphic-webcrypto')
 
-crypto.generateKey() // safe (all other methods are safe)
-crypto.getRandomValues() // insecure!!!
-
 // Only needed for crypto.getRandomValues
 crypto.ensureSecure(err => {
   if (err) throw err
-  crypto.getRandomValues() // safe
-
+  const safeValues = crypto.getRandomValues();
   // Only wait once, future calls are secure
-  // No need to wrap every getRandomValues call
 })
 ```
 

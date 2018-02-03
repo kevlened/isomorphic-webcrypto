@@ -1,4 +1,32 @@
-const generateSecureRandom = require('react-native-securerandom').generateSecureRandom
+let generateSecureRandom;
+if (require.getModules) {
+  const NativeModules = require('react-native').NativeModules;
+  const RNSecureRandom = NativeModules.RNSecureRandom;
+  if (RNSecureRandom && RNSecureRandom.generateSecureRandomAsBase64) {
+    generateSecureRandom = require('react-native-securerandom').generateSecureRandom;
+  }
+} 
+
+if (!generateSecureRandom) {
+  console.log(`
+    isomorphic-webcrypto cannot ensure the security of some operations.
+    Please eject and run:
+
+        npm install react-native-securerandom --save
+        react-native link
+
+    If you'd like not to eject, upvote this feature request:
+    https://expo.canny.io/feature-requests/p/crypto-api
+  `);
+  generateSecureRandom = function(length) {
+    const uint8Array = new Uint8Array(length);
+    while (length && length--) {
+      uint8Array[length] = Math.floor(Math.random() * 256);
+    }
+    return Promise.resolve(uint8Array);
+  }
+}
+
 const EventEmitter = require('mitt')
 const b64u = require('b64u-lite')
 const str2buf = require('str2buf')
@@ -29,9 +57,23 @@ crypto.ensureSecure = function(cb) {
   secureWatch.on('secureRandomError', () => cb(secureRandomError))
 }
 
-function standardAlgoName(algo) {
+function standardizeAlgoName(algo) {
   const upper = algo.toUpperCase();
   return upper === 'RSASSA-PKCS1-V1_5' ? 'RSASSA-PKCS1-v1_5' : upper;
+}
+
+const originalGetRandomValues = crypto.getRandomValues;
+crypto.getRandomValues = function getRandomValues() {
+  if (!secured) {
+    throw new Error(`
+      You must wait until the library is secure to call this method:
+      crypto.ensureSecure(err => {
+        if (err) throw err;
+        const safeValues = crypto.getRandomValues();
+      });
+    `);
+  }
+  return originalGetRandomValues.apply(crypto, arguments);
 }
 
 // wrap all methods to ensure they're secure
@@ -72,12 +114,12 @@ crypto.subtle.generateKey = function() {
   .then(res => {
     if (res.publicKey) {
       res.publicKey.usages = ['verify'];
-      res.publicKey.algorithm.name = standardAlgoName(res.publicKey.algorithm.name);
+      res.publicKey.algorithm.name = standardizeAlgoName(res.publicKey.algorithm.name);
       res.privateKey.usages = ['sign'];
-      res.privateKey.algorithm.name = standardAlgoName(res.privateKey.algorithm.name);
+      res.privateKey.algorithm.name = standardizeAlgoName(res.privateKey.algorithm.name);
     } else {
       res.usages = ['sign', 'verify'];
-      res.algorithm.name = standardAlgoName(res.algorithm.name);
+      res.algorithm.name = standardizeAlgoName(res.algorithm.name);
     }
     return res;
   });
@@ -89,7 +131,7 @@ crypto.subtle.importKey = function() {
   const key = arguments[1];
   return originalImportKey.apply(this, arguments)
   .then(res => {
-    res.algorithm.name = standardAlgoName(res.algorithm.name);
+    res.algorithm.name = standardizeAlgoName(res.algorithm.name);
     switch(res.type) {
       case 'secret':
         res.usages = ['sign', 'verify'];
