@@ -49,12 +49,12 @@ React Native support is implemented using [the Microsoft Research library](https
 ```javascript
 const crypto = require('isomorphic-webcrypto')
 
-// Only needed for crypto.getRandomValues
-crypto.ensureSecure(err => {
-  if (err) throw err
+(async () => {
+  // Only needed for crypto.getRandomValues
+  // but only wait once, future calls are secure
+  await crypto.ensureSecure();
   const safeValues = crypto.getRandomValues();
-  // Only wait once, future calls are secure
-})
+})()
 ```
 
 ## I just want to drop in a script tag
