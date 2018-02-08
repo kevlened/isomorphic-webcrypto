@@ -50,16 +50,25 @@ if (!secured) {
   })
 }
 
-crypto.ensureSecure = function(cb) {
-  if (secured) return cb()
-  if (secureRandomError) return cb(secureRandomError)
-  secureWatch.on('secure', () => cb())
-  secureWatch.on('secureRandomError', () => cb(secureRandomError))
-}
+crypto.ensureSecure = () => new Promise((resolve, reject) => {
+  if (secured) return resolve();
+  if (secureRandomError) return reject(secureRandomError)
+  secureWatch.on('secure', () => resolve())
+  secureWatch.on('secureRandomError', () => reject(secureRandomError))
+});
 
 function standardizeAlgoName(algo) {
   const upper = algo.toUpperCase();
   return upper === 'RSASSA-PKCS1-V1_5' ? 'RSASSA-PKCS1-v1_5' : upper;
+}
+
+function ensureUint8Array(buffer) {
+  if (typeof buffer === 'string' || buffer instanceof String)
+    return str2buf.toUint8Array(buffer);
+  if (!buffer) return;
+  if (buffer instanceof ArrayBuffer) return new Uint8Array(buffer);
+  if (buffer instanceof Uint8Array) return buffer;
+  return buffer;
 }
 
 const originalGetRandomValues = crypto.getRandomValues;
@@ -94,17 +103,14 @@ methods.map(key => {
   const original = crypto.subtle[key]
   crypto.subtle[key] = function() {
     const args = Array.from(arguments)
-    return new Promise((resolve, reject) => {
-      crypto.ensureSecure(err => {
-        if (err) return reject(err)
-        resolve(original.apply(crypto.subtle, args))
-      })
-    })
+    return crypto.ensureSecure()
+    .then(() => original.apply(crypto.subtle, args));
   }
+  crypto.subtle[key].name = key;
 })
 
 const originalGenerateKey = crypto.subtle.generateKey;
-crypto.subtle.generateKey = function() {
+crypto.subtle.generateKey = function generateKey() {
   const algo = arguments[0];
   if (algo) {
     if (algo.name) algo.name = algo.name.toLowerCase();
@@ -126,7 +132,7 @@ crypto.subtle.generateKey = function() {
 }
 
 const originalImportKey = crypto.subtle.importKey;
-crypto.subtle.importKey = function() {
+crypto.subtle.importKey = function importKey() {
   const importType = arguments[0];
   const key = arguments[1];
   return originalImportKey.apply(this, arguments)
@@ -152,7 +158,7 @@ crypto.subtle.importKey = function() {
 }
 
 const originalExportKey = crypto.subtle.exportKey;
-crypto.subtle.exportKey = function() {
+crypto.subtle.exportKey = function exportKey() {
   const key = arguments[1];
   return originalExportKey.apply(this, arguments)
   .then(res => {
@@ -171,6 +177,12 @@ crypto.subtle.exportKey = function() {
     }
     return res;
   });
+}
+
+const originalDigest = crypto.subtle.digest;
+crypto.subtle.digest = function digest() {
+  arguments[1] = ensureUint8Array(arguments[1]);
+  return originalDigest.apply(this, arguments);
 }
 
 module.exports = crypto
