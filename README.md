@@ -15,19 +15,23 @@ There's currently no native crypto support in React Native, so [the Microsoft Re
 
 ## Usage
 
-There's a simple example below, but [there are many more here](https://github.com/diafygi/webcrypto-examples).
+There's a simple hashing example below, but [there are many more WebCrypto examples here](https://github.com/diafygi/webcrypto-examples). This example requires you to `npm install hex-lite`.
 
 ```javascript
 const crypto = require('isomorphic-webcrypto')
+const hex = require('hex-lite')
 // or
 import crypto from 'isomorphic-webcrypto'
+import hex from 'hex-lite'
 
 crypto.subtle.digest(
   { name: 'SHA-256' },
   new Uint8Array([1,2,3]).buffer
 )
 .then(hash => {
-  // do something with the hash buffer
+  // hashes are usually represented as hex strings
+  // hex-lite makes this easier
+  const hashString = hex.fromBuffer(hash);
 })
 ```
 
@@ -53,9 +57,16 @@ const crypto = require('isomorphic-webcrypto')
   // Only needed for crypto.getRandomValues
   // but only wait once, future calls are secure
   await crypto.ensureSecure();
-  const safeValues = crypto.getRandomValues();
+  const array = new Uint8Array(1);
+  crypto.getRandomValues(array);
+  const safeValue = array[0];
 })()
 ```
+
+Working React Native examples:
+
+* Using [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/tree/master/crna) with Expo
+* Using an ejected [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/blob/master/crna-ejected)
 
 ## I just want to drop in a script tag
 
