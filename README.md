@@ -46,6 +46,8 @@ crypto.subtle.digest(
 * Node 4+
 * React Native
 
+For more detailed compatibility details and supported algorithms see [the Compability wiki page](https://github.com/kevlened/isomorphic-webcrypto/wiki/Compatibility).
+
 ### React Native
 
 React Native support is implemented using [the Microsoft Research library](https://github.com/kevlened/msrCrypto). The React Native environment only supports `Math.random()`, so [react-native-securerandom](https://github.com/rh389/react-native-securerandom) is used to provide proper entropy. This is handled automatically, except for `crypto.getRandomValues()`, which requires you wait:

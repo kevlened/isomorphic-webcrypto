@@ -27,11 +27,14 @@ if (!generateSecureRandom) {
   }
 }
 
-const EventEmitter = require('mitt')
-const b64u = require('b64u-lite')
-const str2buf = require('str2buf')
-const crypto = require('msrcrypto')
-crypto.subtle.forceSync = true
+const EventEmitter = require('mitt');
+const b64u = require('b64u-lite');
+const str2buf = require('str2buf');
+const b64 = require('b64-lite');
+global.atob = typeof atob === 'undefined' ? b64.atob : atob;
+global.btoa = typeof btoa === 'undefined' ? b64.btoa : btoa;
+global.msrCryptoPermanentForceSync = true;
+const crypto = require('msrcrypto');
 
 const secureWatch = new EventEmitter()
 
