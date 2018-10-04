@@ -11,7 +11,7 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "node build.js",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "test": "npm run test:node && npm run test:react-native && npm run test:browser",
     "test:node": "jest ./__tests__/node.js",
     "test:react-native": "jest ./__tests__/react-native.js --config=jest.react-native.json",
