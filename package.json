@@ -66,7 +66,7 @@
     "webcrypto-test-suite": "^0.2.0",
     "webpack": "^4.16.1"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "react-native-securerandom": "^0.1.1",
     "expo-random": "*"
   }
