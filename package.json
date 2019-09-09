@@ -68,6 +68,6 @@
   },
   "optionalDependencies": {
     "react-native-securerandom": "^0.1.1",
-    "expo-random": "4.0.0"
+    "expo-random": "*"
   }
 }
