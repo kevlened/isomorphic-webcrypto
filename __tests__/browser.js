@@ -15,6 +15,9 @@ require('webcrypto-test-suite')({
       if (includes(spec,'ES512')) return true;
       if (includes(spec,'RS384') && includes(spec,'exportKey')) return true;
       if (includes(spec,'RS512') && includes(spec,'exportKey')) return true;
+      if (includes(spec,'PS256') && includes(spec,'exportKey')) return true;
+      if (includes(spec,'PS384') && includes(spec,'exportKey')) return true;
+      if (includes(spec,'PS512') && includes(spec,'exportKey')) return true;
     }
     if (isEdge) {
       // Misidentifies private types as public and has no modulesLength or publicExponent
