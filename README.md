@@ -78,7 +78,7 @@ You should use [the webcrypto-shim](https://github.com/vibornoff/webcrypto-shim)
 * Node 8+
 * React Native
 
-Although the library runs on IE11+, the level of functionality varies between implementations
+Although the library runs on IE11+, the level of functionality varies between implementations. The grid below shows the discrepancies between the latest versions of each environment.
 
 > __Legend__
 >
