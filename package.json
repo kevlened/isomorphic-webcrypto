@@ -41,7 +41,6 @@
   "dependencies": {
     "b64-lite": "^1.3.1",
     "b64u-lite": "^1.0.1",
-    "mitt": "^1.1.3",
     "msrcrypto": "^1.5.4",
     "node-webcrypto-ossl": "^1.0.48",
     "str2buf": "^1.3.0",
