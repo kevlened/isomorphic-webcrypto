@@ -78,39 +78,7 @@ You should use [the webcrypto-shim](https://github.com/vibornoff/webcrypto-shim)
 * Node 8+
 * React Native
 
-Although the library runs on IE11+, the level of functionality varies between implementations. They're organized using the [JWA alg abbreviations](https://tools.ietf.org/html/rfc7518#section-3.1):
-
-| Key                | Signature, MAC or Key Management Algorithm                                    |
-| ------------------ | ----------------------------------------------------------------------------- |
-| HS256              | HMAC using SHA-256                                                            |
-| HS384              | HMAC using SHA-384                                                            |
-| HS512              | HMAC using SHA-512                                                            |
-| RS256              | RSASSA-PKCS1-v1_5 using SHA-256                                               |
-| RS384              | RSASSA-PKCS1-v1_5 using SHA-384                                               |
-| RS512              | RSASSA-PKCS1-v1_5 using SHA-512                                               |
-| ES256              | ECDSA using P-256 and SHA-256                                                 |
-| ES384              | ECDSA using P-384 and SHA-384                                                 |
-| ES512              | ECDSA using P-521 and SHA-512                                                 |
-| PS256              | RSASSA-PSS using SHA-256 and MGF1 with SHA-256                                |
-| PS384              | RSASSA-PSS using SHA-384 and MGF1 with SHA-384                                |
-| PS512              | RSASSA-PSS using SHA-512 and MGF1 with SHA-512                                |
-| RSA1_5             | RSAES-PKCS1-v1_5                                                              |
-| RSA-OAEP           | RSAES OAEP using default parameters                                           |
-| RSA-OAEP-256       | RSAES OAEP using SHA-256 and MGF1 with SHA-256                                |
-| A128KW             | AES Key Wrap with default initial value using 128-bit key                     |
-| A192KW             | AES Key Wrap with default initial value using 192-bit key                     |
-| A256KW             | AES Key Wrap with default initial value using 256-bit key                     |
-| dir                | Direct use of a shared symmetric key as the CEK                               |
-| ECDH-ES            | Elliptic Curve Diffie-Hellman Ephemeral Static key agreement using Concat KDF |
-| ECDH-ES+A128KW     | ECDH-ES using Concat KDF and CEK wrapped with "A128KW"                        |
-| ECDH-ES+A192KW     | ECDH-ES using Concat KDF and CEK wrapped with "A192KW"                        |
-| ECDH-ES+A256KW     | ECDH-ES using Concat KDF and CEK wrapped with "A256KW"                        |
-| A128GCMKW          | Key wrapping with AES GCM using 128-bit key                                   |
-| A192GCMKW          | Key wrapping with AES GCM using 192-bit key                                   |
-| A256GCMKW          | Key wrapping with AES GCM using 256-bit key                                   |
-| PBES2-HS256+A128KW | PBES2 with HMAC SHA-256 and "A128KW" wrapping                                 |
-| PBES2-HS384+A192KW | PBES2 with HMAC SHA-384 and "A192KW" wrapping                                 |
-| PBES2-HS512+A256KW | PBES2 with HMAC SHA-512 and "A256KW" wrapping                                 |
+Although the library runs on IE11+, the level of functionality varies between implementations
 
 > __Legend__
 >
@@ -150,6 +118,40 @@ Although the library runs on IE11+, the level of functionality varies between im
 | PBES2-HS256+A128KW | ? | ? | ? | ? | ? | ? |
 | PBES2-HS384+A192KW | ? | ? | ? | ? | ? | ? |
 | PBES2-HS512+A256KW | ? | ? | ? | ? | ? | ? |
+
+Here's a legend for the [JWA alg abbreviations](https://tools.ietf.org/html/rfc7518#section-3.1):
+
+| Key                | Signature, MAC or Key Management Algorithm                                    |
+| ------------------ | ----------------------------------------------------------------------------- |
+| HS256              | HMAC using SHA-256                                                            |
+| HS384              | HMAC using SHA-384                                                            |
+| HS512              | HMAC using SHA-512                                                            |
+| RS256              | RSASSA-PKCS1-v1_5 using SHA-256                                               |
+| RS384              | RSASSA-PKCS1-v1_5 using SHA-384                                               |
+| RS512              | RSASSA-PKCS1-v1_5 using SHA-512                                               |
+| ES256              | ECDSA using P-256 and SHA-256                                                 |
+| ES384              | ECDSA using P-384 and SHA-384                                                 |
+| ES512              | ECDSA using P-521 and SHA-512                                                 |
+| PS256              | RSASSA-PSS using SHA-256 and MGF1 with SHA-256                                |
+| PS384              | RSASSA-PSS using SHA-384 and MGF1 with SHA-384                                |
+| PS512              | RSASSA-PSS using SHA-512 and MGF1 with SHA-512                                |
+| RSA1_5             | RSAES-PKCS1-v1_5                                                              |
+| RSA-OAEP           | RSAES OAEP using default parameters                                           |
+| RSA-OAEP-256       | RSAES OAEP using SHA-256 and MGF1 with SHA-256                                |
+| A128KW             | AES Key Wrap with default initial value using 128-bit key                     |
+| A192KW             | AES Key Wrap with default initial value using 192-bit key                     |
+| A256KW             | AES Key Wrap with default initial value using 256-bit key                     |
+| dir                | Direct use of a shared symmetric key as the CEK                               |
+| ECDH-ES            | Elliptic Curve Diffie-Hellman Ephemeral Static key agreement using Concat KDF |
+| ECDH-ES+A128KW     | ECDH-ES using Concat KDF and CEK wrapped with "A128KW"                        |
+| ECDH-ES+A192KW     | ECDH-ES using Concat KDF and CEK wrapped with "A192KW"                        |
+| ECDH-ES+A256KW     | ECDH-ES using Concat KDF and CEK wrapped with "A256KW"                        |
+| A128GCMKW          | Key wrapping with AES GCM using 128-bit key                                   |
+| A192GCMKW          | Key wrapping with AES GCM using 192-bit key                                   |
+| A256GCMKW          | Key wrapping with AES GCM using 256-bit key                                   |
+| PBES2-HS256+A128KW | PBES2 with HMAC SHA-256 and "A128KW" wrapping                                 |
+| PBES2-HS384+A192KW | PBES2 with HMAC SHA-384 and "A192KW" wrapping                                 |
+| PBES2-HS512+A256KW | PBES2 with HMAC SHA-512 and "A256KW" wrapping                                 |
 
 ## License
 
