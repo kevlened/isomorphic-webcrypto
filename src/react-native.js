@@ -2,10 +2,13 @@ let generateSecureRandom;
 if (require.getModules) {
   const NativeModules = require('react-native').NativeModules;
   const RNSecureRandom = NativeModules.RNSecureRandom;
+  const NativeUnimoduleProxy = NativeModules.NativeUnimoduleProxy;
   if (RNSecureRandom && RNSecureRandom.generateSecureRandomAsBase64) {
     generateSecureRandom = require('react-native-securerandom').generateSecureRandom;
+  } else if (NativeUnimoduleProxy && NativeUnimoduleProxy.ExpoRandom) {
+    generateSecureRandom = require('expo-random').getRandomBytesAsync;
   }
-} 
+}
 
 if (!generateSecureRandom) {
   console.log(`
@@ -15,8 +18,7 @@ if (!generateSecureRandom) {
         npm install react-native-securerandom --save
         react-native link
 
-    If you'd like not to eject, upvote this feature request:
-    https://expo.canny.io/feature-requests/p/crypto-api
+    Or install and configure expo-random: https://www.npmjs.com/package/expo-random
   `);
   generateSecureRandom = function(length) {
     const uint8Array = new Uint8Array(length);
