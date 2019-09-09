@@ -1,2 +1,2 @@
-const WebCrypto = require('node-webcrypto-ossl')
-module.exports = new WebCrypto()
+const { Crypto } = require('@peculiar/webcrypto')
+module.exports = new Crypto()
