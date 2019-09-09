@@ -3,7 +3,7 @@ webcrypto library for Node, React Native and IE11+
 
 ## What?
 
-There's a great Node polyfill for the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), but [it's not isomorphic](https://github.com/anvilresearch/webcrypto/issues/57).
+There's [a great Node polyfill](https://github.com/PeculiarVentures/node-webcrypto-ossl) for the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), but it's not isomorphic.
 
 IE11 and versions of Safari < 11 use an older version of the spec, so the browser implementation includes a [webcrypto-shim](https://github.com/vibornoff/webcrypto-shim) to iron out the differences. You'll still need to provide your own Promise polyfill.
 
