@@ -68,6 +68,7 @@
     "webpack": "^4.16.1"
   },
   "optionalDependencies": {
-    "react-native-securerandom": "^0.1.1"
+    "react-native-securerandom": "^0.1.1",
+    "expo-random": "4.0.0"
   }
 }
