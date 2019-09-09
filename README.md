@@ -75,7 +75,7 @@ You should use [the webcrypto-shim](https://github.com/vibornoff/webcrypto-shim)
 * Chrome 43+
 * Opera 24+
 * Firefox 34+
-* Node 4+
+* Node 8+
 * React Native
 
 Although the library runs on IE11+, the level of functionality varies between implementations. They're organized using the [JWA alg abbreviations](https://tools.ietf.org/html/rfc7518#section-3.1):
