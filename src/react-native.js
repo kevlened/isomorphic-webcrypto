@@ -12,13 +12,8 @@ if (require.getModules) {
 
 if (!generateSecureRandom) {
   console.log(`
-    isomorphic-webcrypto cannot ensure the security of some operations.
-    Please eject and run:
-
-        npm install react-native-securerandom --save
-        react-native link
-
-    Or install and configure expo-random: https://www.npmjs.com/package/expo-random
+    isomorphic-webcrypto cannot ensure the security of some operations!
+    Install and configure expo-random or react-native-securerandom
   `);
   generateSecureRandom = function(length) {
     const uint8Array = new Uint8Array(length);
@@ -29,38 +24,27 @@ if (!generateSecureRandom) {
   }
 }
 
-const EventEmitter = require('mitt');
-const b64u = require('b64u-lite');
 const str2buf = require('str2buf');
+const b64u = require('b64u-lite');
 const b64 = require('b64-lite');
 global.atob = typeof atob === 'undefined' ? b64.atob : atob;
 global.btoa = typeof btoa === 'undefined' ? b64.btoa : btoa;
 global.msrCryptoPermanentForceSync = true;
 const crypto = require('msrcrypto');
 
-const secureWatch = new EventEmitter()
-
-let secured = !crypto.initPrng
-let secureRandomError
-if (!secured) {
-  generateSecureRandom(48)
-  .then(byteArray => {
-    crypto.initPrng(Array.from(byteArray))
-    secured = true
-    secureWatch.emit('secure')
-  })
-  .catch(err => {
-    secureRandomError = err
-    secureWatch.emit('secureRandomError')
-  })
-}
-
-crypto.ensureSecure = () => new Promise((resolve, reject) => {
-  if (secured) return resolve();
-  if (secureRandomError) return reject(secureRandomError)
-  secureWatch.on('secure', () => resolve())
-  secureWatch.on('secureRandomError', () => reject(secureRandomError))
+let isSecured = false;
+const secured = new Promise((resolve, reject) => {
+    if (!crypto.initPrng) return resolve(false);
+    return generateSecureRandom(48)
+    .then(byteArray => {
+        crypto.initPrng(Array.from(byteArray))
+        isSecured = true;
+        resolve(true);
+    })
+    .catch(err => reject(err));
 });
+
+crypto.ensureSecure = () => secured;
 
 function standardizeAlgoName(algo) {
   const upper = algo.toUpperCase();
@@ -78,13 +62,12 @@ function ensureUint8Array(buffer) {
 
 const originalGetRandomValues = crypto.getRandomValues;
 crypto.getRandomValues = function getRandomValues() {
-  if (!secured) {
+  if (!isSecured) {
     throw new Error(`
       You must wait until the library is secure to call this method:
-      crypto.ensureSecure(err => {
-        if (err) throw err;
-        const safeValues = crypto.getRandomValues();
-      });
+
+      await crypto.ensureSecure();
+      const safeValues = crypto.getRandomValues();
     `);
   }
   return originalGetRandomValues.apply(crypto, arguments);
