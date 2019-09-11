@@ -9,6 +9,8 @@ IE11 and versions of Safari < 11 use an older version of the spec, so the browse
 
 There's currently no native crypto support in React Native, so [the Microsoft Research library](https://github.com/kevlened/msrCrypto) is exposed.
 
+> **Note:** If you're performing cross-platform jwt operations, consider [jwt-lite](https://www.npmjs.com/package/jwt-lite) or [jwt-verifier-lite](https://www.npmjs.com/package/jwt-verifier-lite) (for OpenID Connect), which build on `isomorphic-webcrypto`
+
 ## Install
 
 `npm install isomorphic-webcrypto`
