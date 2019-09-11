@@ -1,4 +1,4 @@
-# isomorphic-webcrypto [![NPM](https://img.shields.io/npm/v/isomorphic-webcrypto.svg)](https://npmjs.com/package/isomorphic-webcrypto)
+# isomorphic-webcrypto [![NPM](https://img.shields.io/npm/v/isomorphic-webcrypto.svg)](https://npmjs.com/package/isomorphic-webcrypto) [![bundlephobia](https://img.shields.io/bundlephobia/minzip/isomorphic-webcrypto.svg)](https://bundlephobia.com/result?p=isomorphic-webcrypto)
 webcrypto library for Node, React Native and IE11+
 
 ## What?
