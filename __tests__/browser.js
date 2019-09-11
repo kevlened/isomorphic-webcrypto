@@ -6,11 +6,16 @@ window.Promise = require('bluebird');
 
 var ua = navigator.userAgent;
 var isSafari = includes(ua, 'Safari') && !includes(ua, 'Chrome');
+var isChrome = !isSafari && includes(ua, 'Chrome');
 var isEdge = includes(ua, 'Edge');
 var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
 require('webcrypto-test-suite')({
   crypto: require('../src/browser.js'),
   shouldSkip: function(spec) {
+    if (isChrome) {
+      if (includes(spec, 'A192GCM')) return true;
+      if (includes(spec, 'A192CBC')) return true;
+    }
     if (isSafari) {
       if (includes(spec,'ES512')) return true;
       if (includes(spec,'RS384') && includes(spec,'exportKey')) return true;

@@ -113,8 +113,8 @@ crypto.subtle.generateKey = function generateKey() {
       res.privateKey.usages = ['sign'];
       res.privateKey.algorithm.name = standardizeAlgoName(res.privateKey.algorithm.name);
     } else {
-      res.usages = ['sign', 'verify'];
       res.algorithm.name = standardizeAlgoName(res.algorithm.name);
+      res.usages = res.algorithm.name === 'HMAC' ? ['sign', 'verify'] : ['encrypt', 'decrypt'];
     }
     return res;
   });
@@ -129,7 +129,7 @@ crypto.subtle.importKey = function importKey() {
     res.algorithm.name = standardizeAlgoName(res.algorithm.name);
     switch(res.type) {
       case 'secret':
-        res.usages = ['sign', 'verify'];
+        res.usages = res.algorithm.name === 'HMAC' ? ['sign', 'verify'] : ['encrypt', 'decrypt'];
         break;
       case 'private':
         res.usages = ['sign'];
