@@ -26,5 +26,6 @@ require('webcrypto-test-suite')({
 
     // FIXME: https://github.com/facebook/jest/issues/8475
     if (spec.includes('sign')) return true;
+    if (spec.includes('PBKDF2') && spec.includes('deriveKey')) return true;
   }
 });

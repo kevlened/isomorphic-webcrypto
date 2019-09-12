@@ -28,9 +28,14 @@ if (!generateSecureRandom) {
 const str2buf = require('str2buf');
 const b64u = require('b64u-lite');
 const b64 = require('b64-lite');
+
+global.window.navigator = {userAgent: ''};
+global.PV_WEBCRYPTO_LINER_LOG = true;
+global.self = global.window;
 global.atob = typeof atob === 'undefined' ? b64.atob : atob;
 global.btoa = typeof btoa === 'undefined' ? b64.btoa : btoa;
 global.msrCryptoPermanentForceSync = true;
+
 const crypto = require('msrcrypto');
 
 let isSecured = false;
@@ -43,7 +48,58 @@ const secured = new Promise((resolve, reject) => {
         resolve(true);
     })
     .catch(err => reject(err));
-});
+  })
+  .then(() => {
+    global.window.crypto = crypto;
+
+    global.asmCrypto = require('asmcrypto.js');
+    const liner = require('./webcrypto-liner');
+
+    const originalImportKey = crypto.subtle.importKey;
+    crypto.subtle.importKey = function importKey() {
+      const importType = arguments[0];
+      const key = arguments[1];
+      const algorithm = arguments[2];
+      if (algorithm.name.toUpperCase() === 'PBKDF2') {
+        return liner.crypto.subtle.getProvider('PBKDF2').onImportKey(...arguments);
+      }
+
+      return originalImportKey.apply(this, arguments)
+      .then(res => {
+        res.algorithm.name = standardizeAlgoName(res.algorithm.name);
+        switch(res.type) {
+          case 'secret':
+            res.usages = res.algorithm.name === 'HMAC' ? ['sign', 'verify'] : ['encrypt', 'decrypt'];
+            break;
+          case 'private':
+            res.usages = ['sign'];
+            break;
+          case 'public':
+            res.usages = ['verify'];
+            break;
+        }
+        if (importType === 'jwk' && key.kty === 'RSA') {
+          res.algorithm.modulusLength = b64u.toBinaryString(key.n).length * 8;
+          res.algorithm.publicExponent = str2buf.toUint8Array(b64u.toBinaryString(key.e));
+        }
+        return res;
+      });
+    }
+
+    const originalDeriveBits = crypto.subtle.deriveBits;
+    crypto.subtle.deriveBits = function deriveBits() {
+      const algorithm = arguments[0];
+      if (algorithm.name.toUpperCase() === 'PBKDF2') {
+        return liner.crypto.subtle.getProvider('PBKDF2').onDeriveBits(...arguments);
+      }
+
+      return originalDeriveBits.apply(this, arguments);
+    }
+  })
+  .catch(e => {
+    console.log('Unable to secure:', e.message);
+    throw e;
+  });
 
 crypto.ensureSecure = () => secured;
 
@@ -90,11 +146,20 @@ const methods = [
 ]
 methods.map(key => {
   const original = crypto.subtle[key]
-  crypto.subtle[key] = function() {
+  const proxy = function() {
     const args = Array.from(arguments)
+    const before = crypto.subtle[key];
     return crypto.ensureSecure()
-    .then(() => original.apply(crypto.subtle, args));
+    .then(() => {
+      const after = crypto.subtle[key];
+      if (before === after) {
+        return original.apply(crypto.subtle, args)
+      } else {
+        return crypto.subtle[key].apply(crypto.subtle, args)
+      }
+    });
   }
+  crypto.subtle[key] = proxy;
   crypto.subtle[key].name = key;
 })
 
@@ -115,32 +180,6 @@ crypto.subtle.generateKey = function generateKey() {
     } else {
       res.algorithm.name = standardizeAlgoName(res.algorithm.name);
       res.usages = res.algorithm.name === 'HMAC' ? ['sign', 'verify'] : ['encrypt', 'decrypt'];
-    }
-    return res;
-  });
-}
-
-const originalImportKey = crypto.subtle.importKey;
-crypto.subtle.importKey = function importKey() {
-  const importType = arguments[0];
-  const key = arguments[1];
-  return originalImportKey.apply(this, arguments)
-  .then(res => {
-    res.algorithm.name = standardizeAlgoName(res.algorithm.name);
-    switch(res.type) {
-      case 'secret':
-        res.usages = res.algorithm.name === 'HMAC' ? ['sign', 'verify'] : ['encrypt', 'decrypt'];
-        break;
-      case 'private':
-        res.usages = ['sign'];
-        break;
-      case 'public':
-        res.usages = ['verify'];
-        break;
-    }
-    if (importType === 'jwk' && key.kty === 'RSA') {
-      res.algorithm.modulusLength = b64u.toBinaryString(key.n).length * 8;
-      res.algorithm.publicExponent = str2buf.toUint8Array(b64u.toBinaryString(key.e));
     }
     return res;
   });

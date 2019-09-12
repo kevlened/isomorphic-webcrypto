@@ -40,6 +40,7 @@
   "homepage": "https://github.com/kevlened/isomorphic-webcrypto#readme",
   "dependencies": {
     "@peculiar/webcrypto": "^1.0.19",
+    "asmcrypto.js": "^0.22.0",
     "b64-lite": "^1.3.1",
     "b64u-lite": "^1.0.1",
     "msrcrypto": "^1.5.6",
@@ -63,7 +64,8 @@
     "karma-webpack": "^3.0.0",
     "react": "^16.9.0",
     "react-native": "^0.60.5",
-    "webcrypto-test-suite": "^0.3.2",
+    "webcrypto-liner": "^1.0.1",
+    "webcrypto-test-suite": "^0.4.0",
     "webpack": "^4.16.1"
   },
   "optionalDependencies": {
