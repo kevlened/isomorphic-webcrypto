@@ -30,8 +30,6 @@ const b64u = require('b64u-lite');
 const b64 = require('b64-lite');
 
 global.window.navigator = {userAgent: ''};
-global.PV_WEBCRYPTO_LINER_LOG = true;
-global.self = global.window;
 global.atob = typeof atob === 'undefined' ? b64.atob : atob;
 global.btoa = typeof btoa === 'undefined' ? b64.btoa : btoa;
 global.msrCryptoPermanentForceSync = true;
@@ -50,7 +48,9 @@ const secured = new Promise((resolve, reject) => {
     .catch(err => reject(err));
   })
   .then(() => {
-    global.window.crypto = crypto;
+    if (!global.window.crypto) {
+      global.window.crypto = crypto;
+    }
 
     global.asmCrypto = require('asmcrypto.js');
     const liner = require('./webcrypto-liner');
@@ -61,7 +61,15 @@ const secured = new Promise((resolve, reject) => {
       const key = arguments[1];
       const algorithm = arguments[2];
       if (algorithm.name.toUpperCase() === 'PBKDF2') {
-        return liner.crypto.subtle.getProvider('PBKDF2').onImportKey(...arguments);
+        let importKey, ref;
+        if (liner.crypto.subtle.getProvider) {
+          ref = liner.crypto.subtle.getProvider('PBKDF2');
+          importKey = ref.onImportKey;
+        } else {
+          ref = liner.crypto.subtle;
+          importKey = ref.importKey;
+        }
+        return importKey.apply(ref, arguments);
       }
 
       return originalImportKey.apply(this, arguments)
@@ -90,7 +98,15 @@ const secured = new Promise((resolve, reject) => {
     crypto.subtle.deriveBits = function deriveBits() {
       const algorithm = arguments[0];
       if (algorithm.name.toUpperCase() === 'PBKDF2') {
-        return liner.crypto.subtle.getProvider('PBKDF2').onDeriveBits(...arguments);
+        let deriveBits, ref;
+        if (liner.crypto.subtle.getProvider) {
+          ref = liner.crypto.subtle.getProvider('PBKDF2');
+          deriveBits = ref.onDeriveBits;
+        } else {
+          ref = liner.crypto.subtle;
+          deriveBits = ref.deriveBits;
+        }
+        return deriveBits.apply(ref, arguments);
       }
 
       return originalDeriveBits.apply(this, arguments);
