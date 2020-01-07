@@ -29,7 +29,10 @@ const str2buf = require('str2buf');
 const b64u = require('b64u-lite');
 const b64 = require('b64-lite');
 
-global.window.navigator = {userAgent: ''};
+if(global.window.navigator === undefined)
+  global.window.navigator = {};
+
+global.window.navigator.userAgent = '';
 global.atob = typeof atob === 'undefined' ? b64.atob : atob;
 global.btoa = typeof btoa === 'undefined' ? b64.btoa : btoa;
 global.msrCryptoPermanentForceSync = true;
