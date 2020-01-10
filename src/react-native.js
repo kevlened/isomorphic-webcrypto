@@ -72,6 +72,7 @@ const secured = new Promise((resolve, reject) => {
           ref = liner.crypto.subtle;
           importKey = ref.importKey;
         }
+        arguments[1] = new ArrayBuffer(arguments[1]);
         return importKey.apply(ref, arguments);
       }
 
