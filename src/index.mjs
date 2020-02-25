@@ -1,2 +1,2 @@
-import * as WebCrypto from 'node-webcrypto-ossl'
+import * as WebCrypto from '@peculiar/webcrypto'
 export default new WebCrypto()
