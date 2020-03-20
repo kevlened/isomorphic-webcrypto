@@ -52,8 +52,8 @@
     "bluebird": "^3.5.1",
     "jasmine": "^3.4.0",
     "jasmine-core": "^3.4.0",
-    "jest": "^24.9.0",
-    "karma": "^4.3.0",
+    "jest": "^25.1.0",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-edge-launcher": "^0.4.2",
     "karma-firefox-launcher": "^1.1.0",
@@ -61,12 +61,12 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-virtualbox-edge-launcher": "^1.1.8",
     "karma-virtualbox-ie11-launcher": "^1.1.8",
-    "karma-webpack": "^3.0.0",
+    "karma-webpack": "^4.0.2",
     "react": "^16.9.0",
-    "react-native": "^0.60.5",
+    "react-native": "^0.61.5",
     "webcrypto-liner": "^1.0.1",
     "webcrypto-test-suite": "^0.4.0",
-    "webpack": "^4.41.5"
+    "webpack": "^4.42.0"
   },
   "optionalDependencies": {
     "react-native-securerandom": "^0.1.1",
