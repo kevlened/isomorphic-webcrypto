@@ -1,2 +1,2 @@
-import * as WebCrypto from '@peculiar/webcrypto'
-export default new WebCrypto()
+import { Crypto } from '@peculiar/webcrypto'
+export default new Crypto()
