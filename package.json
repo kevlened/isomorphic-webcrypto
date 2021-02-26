@@ -63,12 +63,12 @@
     "karma-virtualbox-ie11-launcher": "^1.1.8",
     "karma-webpack": "^4.0.2",
     "react": "^16.9.0",
-    "react-native": "^0.61.5",
     "webcrypto-liner": "^1.0.1",
     "webcrypto-test-suite": "^0.4.0",
     "webpack": "^4.42.0"
   },
   "optionalDependencies": {
+    "react-native": "^0.61.5",
     "react-native-securerandom": "^0.1.1",
     "expo-random": "*",
     "@unimodules/core": "*",
