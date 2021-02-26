@@ -7,6 +7,5 @@ addons:
   chrome: stable
 install:
   - npm i
-  - npm i react-native --no-save
 script:
   - npm test
