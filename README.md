@@ -1,4 +1,5 @@
 # isomorphic-webcrypto [![NPM](https://img.shields.io/npm/v/isomorphic-webcrypto.svg)](https://npmjs.com/package/isomorphic-webcrypto) [![bundlephobia](https://img.shields.io/bundlephobia/minzip/isomorphic-webcrypto.svg)](https://bundlephobia.com/result?p=isomorphic-webcrypto)
+
 webcrypto library for Node, React Native and IE11+
 
 ## What?
@@ -20,21 +21,19 @@ There's currently no native crypto support in React Native, so [the Microsoft Re
 There's a simple hashing example below, but [there are many more WebCrypto examples here](https://github.com/diafygi/webcrypto-examples). This example requires you to `npm install hex-lite`.
 
 ```javascript
-const crypto = require('isomorphic-webcrypto')
-const hex = require('hex-lite')
+const crypto = require("isomorphic-webcrypto");
+const hex = require("hex-lite");
 // or
-import crypto from 'isomorphic-webcrypto'
-import hex from 'hex-lite'
+import crypto from "isomorphic-webcrypto";
+import hex from "hex-lite";
 
-crypto.subtle.digest(
-  { name: 'SHA-256' },
-  new Uint8Array([1,2,3]).buffer
-)
-.then(hash => {
-  // hashes are usually represented as hex strings
-  // hex-lite makes this easier
-  const hashString = hex.fromBuffer(hash);
-})
+crypto.subtle
+  .digest({ name: "SHA-256" }, new Uint8Array([1, 2, 3]).buffer)
+  .then((hash) => {
+    // hashes are usually represented as hex strings
+    // hex-lite makes this easier
+    const hashString = hex.fromBuffer(hash);
+  });
 ```
 
 ### React Native
@@ -42,22 +41,20 @@ crypto.subtle.digest(
 React Native support is implemented using [the Microsoft Research library](https://github.com/kevlened/msrCrypto). The React Native environment only supports `Math.random()`, so [react-native-securerandom](https://github.com/rh389/react-native-securerandom) is used to provide proper entropy. This is handled automatically, except for `crypto.getRandomValues()`, which requires you wait:
 
 ```javascript
-const crypto = require('isomorphic-webcrypto')
-
-(async () => {
+const crypto = require("isomorphic-webcrypto")(async () => {
   // Only needed for crypto.getRandomValues
   // but only wait once, future calls are secure
   await crypto.ensureSecure();
   const array = new Uint8Array(1);
   crypto.getRandomValues(array);
   const safeValue = array[0];
-})()
+})();
 ```
 
 Working React Native examples:
 
-* Using [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/tree/master/crna) with Expo
-* Using an ejected [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/blob/master/crna-ejected)
+- Using [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/tree/master/crna) with Expo
+- Using an ejected [create-react-native-app](https://github.com/kevlened/webcrypto-react-native-examples/blob/master/crna-ejected)
 
 ## I just want to drop in a script tag
 
@@ -71,55 +68,55 @@ You should use [the webcrypto-shim](https://github.com/vibornoff/webcrypto-shim)
 
 ## Compatibility
 
-* IE11+
-* Safari 8+
-* Edge 12+
-* Chrome 43+
-* Opera 24+
-* Firefox 34+
-* Node 8+
-* React Native
+- IE11+
+- Safari 8+
+- Edge 12+
+- Chrome 43+
+- Opera 24+
+- Firefox 34+
+- Node 8+
+- React Native
 
 Although the library runs on IE11+, the level of functionality varies between implementations. The grid below shows the discrepancies between the latest versions of each environment.
 
-> __Legend__
+> **Legend**
 >
-> * **~** works with some caveats - see the \_\_tests__ directory for the caveats
-> * **?** untested
-> * **x** unsupported algorithm
-> * **strikethrough** broken method
+> - **~** works with some caveats - see the \_\_tests\_\_ directory for the caveats
+> - **?** untested
+> - **x** unsupported algorithm
+> - **strikethrough** broken method
 
-| Key                | Node                                                        | React Native                                                | Chrome/Firefox                                          | Safari                                                      | Edge                                                          | IE11                                                            |
-| ------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
-| HS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
-| HS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
-| HS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | x                                                               |
-| RS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | ~importKey<br>exportKey<br>~generateKey<br>~~sign~~<br>verify | ~importKey<br>~exportKey<br>generateKey<br>~~sign~~<br>verify   |
-| RS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ~importKey<br>exportKey<br>~generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
-| RS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ~importKey<br>exportKey<br>~generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>~~sign~~<br>~~verify~~ |
-| PS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ? | ? |
-| PS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ? | ? |
-| PS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ? | ? |
-| ES256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | x                                                             | x                                                               |
-| ES384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | x                                                             | x                                                               |
-| ES512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | x                                                           | x                                                             | x                                                               |
-| RSA1_5             | ? | ? | ? | ? | ? | ? |
-| RSA-OAEP           | ? | ? | ? | ? | ? | ? |
-| RSA-OAEP-256       | ? | ? | ? | ? | ? | ? |
-| A128KW             | ? | ? | ? | ? | ? | ? |
-| A192KW             | ? | ? | ? | ? | ? | ? |
-| A256KW             | ? | ? | ? | ? | ? | ? |
-| dir                | ? | ? | ? | ? | ? | ? |
-| ECDH-ES            | ? | ? | ? | ? | ? | ? |
-| ECDH-ES+A128KW     | ? | ? | ? | ? | ? | ? |
-| ECDH-ES+A192KW     | ? | ? | ? | ? | ? | ? |
-| ECDH-ES+A256KW     | ? | ? | ? | ? | ? | ? |
-| A128GCMKW          | ? | ? | ? | ? | ? | ? |
-| A192GCMKW          | ? | ? | ? | ? | ? | ? |
-| A256GCMKW          | ? | ? | ? | ? | ? | ? |
-| PBES2-HS256+A128KW | ? | ? | ? | ? | ? | ? |
-| PBES2-HS384+A192KW | ? | ? | ? | ? | ? | ? |
-| PBES2-HS512+A256KW | ? | ? | ? | ? | ? | ? |
+| Key                | Node                                                    | React Native                                                | Chrome/Firefox                                          | Safari                                                      | Edge                                                          | IE11                                                            |
+| ------------------ | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| HS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
+| HS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
+| HS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify       | x                                                               |
+| RS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | ~importKey<br>exportKey<br>~generateKey<br>~~sign~~<br>verify | ~importKey<br>~exportKey<br>generateKey<br>~~sign~~<br>verify   |
+| RS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ~importKey<br>exportKey<br>~generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify         |
+| RS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ~importKey<br>exportKey<br>~generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>~~sign~~<br>~~verify~~ |
+| PS256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ?                                                             | ?                                                               |
+| PS384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ?                                                             | ?                                                               |
+| PS512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>~~generateKey~~<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>~~exportKey~~<br>generateKey<br>sign<br>verify | ?                                                             | ?                                                               |
+| ES256              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | x                                                             | x                                                               |
+| ES384              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | x                                                             | x                                                               |
+| ES512              | importKey<br>exportKey<br>generateKey<br>sign<br>verify | importKey<br>exportKey<br>generateKey<br>sign<br>verify     | importKey<br>exportKey<br>generateKey<br>sign<br>verify | x                                                           | x                                                             | x                                                               |
+| RSA1_5             | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| RSA-OAEP           | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| RSA-OAEP-256       | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A128KW             | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A192KW             | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A256KW             | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| dir                | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| ECDH-ES            | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| ECDH-ES+A128KW     | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| ECDH-ES+A192KW     | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| ECDH-ES+A256KW     | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A128GCMKW          | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A192GCMKW          | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| A256GCMKW          | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| PBES2-HS256+A128KW | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| PBES2-HS384+A192KW | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
+| PBES2-HS512+A256KW | ?                                                       | ?                                                           | ?                                                       | ?                                                           | ?                                                             | ?                                                               |
 
 Here's a legend for the [JWA alg abbreviations](https://tools.ietf.org/html/rfc7518#section-3.1):
 

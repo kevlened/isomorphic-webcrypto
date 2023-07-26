@@ -6,15 +6,15 @@ if (require.getModules) {
   if (RNSecureRandom && RNSecureRandom.generateSecureRandomAsBase64) {
     generateSecureRandom = require('react-native-securerandom').generateSecureRandom;
   } else if (NativeUnimoduleProxy && NativeUnimoduleProxy.exportedMethods.ExpoRandom) {
-    generateSecureRandom = require('expo-random').getRandomBytesAsync;
+    generateSecureRandom = require("expo-crypto").getRandomBytesAsync;
   }
 }
 
 if (!generateSecureRandom) {
   console.log(`
     isomorphic-webcrypto cannot ensure the security of some operations!
-    Install and configure react-native-securerandom or expo-random
-    If managed by Expo, run 'expo install expo-random'
+    Install and configure react-native-securerandom or expo-crypto
+    If managed by Expo, run 'expo install expo-crypto'
   `);
   generateSecureRandom = function(length) {
     const uint8Array = new Uint8Array(length);
