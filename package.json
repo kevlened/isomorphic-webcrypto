@@ -70,7 +70,7 @@
   },
   "optionalDependencies": {
     "react-native-securerandom": "^0.1.1",
-    "expo-random": "*",
+    "expo-crypto": "*",
     "@unimodules/core": "*",
     "@unimodules/react-native-adapter": "*"
   }
